@@ -1,0 +1,179 @@
+diff --git a/src/ld/Options.cpp b/src/ld/Options.cpp
+index 3ffd13d15d5be33590045a234107637893727878..3661d84bb9f95bbef2170078c055afeb9fd143c0 100644
+--- a/src/ld/Options.cpp
++++ b/src/ld/Options.cpp
+@@ -64,7 +64,7 @@ namespace lto {
+ // magic to place command line in crash reports
+ const int crashreporterBufferSize = 2000;
+ static char crashreporterBuffer[crashreporterBufferSize];
+-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1070
++#if 0
+ 	#include <CrashReporterClient.h>
+ 	// hack until ld does not need to build on 10.6 anymore
+     struct crashreporter_annotations_t gCRAnnotations 
+@@ -4066,6 +4066,9 @@ void Options::parse(int argc, const char* argv[])
+ 			else if (strcmp(arg, "-adhoc_codesign") == 0) {
+ 				fAdHocSign = true;
+ 			}
++			else if (strcmp(arg, "-no_adhoc_codesign") == 0) {
++				fAdHocSign = false;
++			}
+ 			else if (strcmp(arg, "-oso_prefix") == 0) {
+ 				const char* path = argv[++i];
+ 				if ( path == NULL )
+@@ -6406,7 +6409,7 @@ void Options::checkForClassic(int argc, const char* argv[])
+ 	bool newLinker = false;
+ 	
+ 	// build command line buffer in case ld crashes
+-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1070
++#if 0
+ 	CRSetCrashLogMessage(crashreporterBuffer);
+ #endif
+ 	const char* srcRoot = getenv("SRCROOT");
+diff --git a/src/ld/LinkEdit.hpp b/src/ld/LinkEdit.hpp
+index 8ceb1ab3464c8e90d8f61201b69c099fd9dffc1a..05301131db6d576449dcaade397b2514c06d7b9b 100644
+--- a/src/ld/LinkEdit.hpp
++++ b/src/ld/LinkEdit.hpp
+@@ -31,7 +31,7 @@
+ #include <limits.h>
+ #include <unistd.h>
+ #include <CommonCrypto/CommonDigest.h>
+-#include <CommonCrypto/CommonDigestSPI.h>
++//#include <CommonCrypto/CommonDigestSPI.h>
+ 
+ #include <vector>
+ #include <unordered_map>
+diff --git a/ld64.xcodeproj/project.pbxproj b/ld64.xcodeproj/project.pbxproj
+index a3f9a5a6463132bf6ed6816d03f3c99790317acd..c42f568d984a9f140777e6f878e568d1018eb54c 100644
+--- a/ld64.xcodeproj/project.pbxproj
++++ b/ld64.xcodeproj/project.pbxproj
+@@ -43,6 +43,8 @@
+ 
+ /* Begin PBXBuildFile section */
+ 		37D7995423A4666000B314BC /* generic_dylib_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37D7995323A4666000B314BC /* generic_dylib_file.cpp */; };
++		74578AE32642915E00A60B7F /* libswiftDemangle.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74578AE22642915E00A60B7F /* libswiftDemangle.dylib */; };
++		74578AE52642AC2B00A60B7F /* libtapi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74578AE42642AC2B00A60B7F /* libtapi.dylib */; };
+ 		83046A851C8FF2F700024A7E /* objcimageinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83046A841C8FF2D000024A7E /* objcimageinfo.cpp */; };
+ 		B028FCF21A9E7C3F00E3584B /* bitcode_bundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B028FCF11A9E7C3F00E3584B /* bitcode_bundle.cpp */; };
+ 		B3B672421406D42800A376BB /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B672411406D42800A376BB /* Snapshot.cpp */; };
+@@ -246,6 +248,8 @@
+ 
+ /* Begin PBXFileReference section */
+ 		37D7995323A4666000B314BC /* generic_dylib_file.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = generic_dylib_file.cpp; sourceTree = "<group>"; };
++		74578AE22642915E00A60B7F /* libswiftDemangle.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftDemangle.dylib; path = Toolchains/XcodeDefault.xctoolchain/usr/lib/libswiftDemangle.dylib; sourceTree = DEVELOPER_DIR; };
++		74578AE42642AC2B00A60B7F /* libtapi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtapi.dylib; path = Toolchains/XcodeDefault.xctoolchain/usr/lib/libtapi.dylib; sourceTree = DEVELOPER_DIR; };
+ 		83046A831C8FF23E00024A7E /* objcimageinfo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = objcimageinfo; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		83046A841C8FF2D000024A7E /* objcimageinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = objcimageinfo.cpp; path = src/other/objcimageinfo.cpp; sourceTree = "<group>"; };
+ 		B028FCF01A9E7B4A00E3584B /* bitcode_bundle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bitcode_bundle.h; sourceTree = "<group>"; };
+@@ -374,6 +378,8 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
++				74578AE32642915E00A60B7F /* libswiftDemangle.dylib in Frameworks */,
++				74578AE52642AC2B00A60B7F /* libtapi.dylib in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -408,6 +414,15 @@
+ /* End PBXFrameworksBuildPhase section */
+ 
+ /* Begin PBXGroup section */
++		74578ADF2642915900A60B7F /* Frameworks */ = {
++			isa = PBXGroup;
++			children = (
++				74578AE42642AC2B00A60B7F /* libtapi.dylib */,
++				74578AE22642915E00A60B7F /* libswiftDemangle.dylib */,
++			);
++			name = Frameworks;
++			sourceTree = "<group>";
++		};
+ 		F9023C2C06D5A227001BBF46 = {
+ 			isa = PBXGroup;
+ 			children = (
+@@ -416,6 +431,7 @@
+ 				F9B813B00EC27B9E00F94C13 /* other */,
+ 				F9B8137E0EC2651200F94C13 /* doc */,
+ 				F9023C3A06D5A23E001BBF46 /* Products */,
++				74578ADF2642915900A60B7F /* Frameworks */,
+ 			);
+ 			sourceTree = "<group>";
+ 		};
+@@ -1234,10 +1250,15 @@
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(DT_TOOLCHAIN_DIR)/usr/local/include",
+ 					"$(TOOLCHAIN_DIR)/usr/local/include",
++					"$(SRCROOT)/../tapi/include",
++					"$(SRCROOT)/../dyld/include",
++					"$(SRCROOT)/../llvm.src/include",
++					"$(SRCROOT)/../corecrypto/include",
+ 				);
+ 				INSTALL_PATH = "$(DT_VARIANT)/$(TOOLCHAIN_INSTALL_DIR)/usr/bin";
+-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../lib/";
++				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../lib/ @executable_path /var/db/xcode_select_link/Toolchains/XcodeDefault.xctoolchain/usr/lib /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib /usr/local/lib";
+ 				LINKER_DISPLAYS_MANGLED_NAMES = NO;
++				MACOSX_DEPLOYMENT_TARGET = 10.15;
+ 				ONLY_ACTIVE_ARCH = NO;
+ 				OTHER_CPLUSPLUSFLAGS = (
+ 					"-stdlib=libc++",
+@@ -1253,7 +1274,8 @@
+ 					"-Wl,-stack_size,0x10000000",
+ 				);
+ 				PRODUCT_NAME = ld;
+-				SDKROOT = macosx.internal;
++				RC_ProjectSourceVersion = 609;
++				SDKROOT = macosx;
+ 				SECTORDER_FLAGS = "";
+ 				TOOLCHAINS = osx;
+ 				VERSIONING_SYSTEM = "apple-generic";
+@@ -1313,9 +1335,14 @@
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(DT_TOOLCHAIN_DIR)/usr/local/include",
+ 					"$(TOOLCHAIN_DIR)/usr/local/include",
++					"$(SRCROOT)/../tapi/include",
++					"$(SRCROOT)/../dyld/include",
++					"$(SRCROOT)/../llvm.src/include",
++					"$(SRCROOT)/../corecrypto/include",
+ 				);
+ 				INSTALL_PATH = "$(DT_VARIANT)/$(TOOLCHAIN_INSTALL_DIR)/usr/bin";
+-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../lib/";
++				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../lib/ @executable_path /var/db/xcode_select_link/Toolchains/XcodeDefault.xctoolchain/usr/lib /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib /usr/local/lib";
++				MACOSX_DEPLOYMENT_TARGET = 10.15;
+ 				OTHER_CPLUSPLUSFLAGS = (
+ 					"-stdlib=libc++",
+ 					"$(OTHER_CPLUSPLUSFLAGS)",
+@@ -1330,7 +1357,8 @@
+ 					"-Wl,-stack_size,0x01000000",
+ 				);
+ 				PRODUCT_NAME = ld;
+-				SDKROOT = macosx.internal;
++				RC_ProjectSourceVersion = 609;
++				SDKROOT = macosx;
+ 				SECTORDER_FLAGS = "";
+ 				STRIP_INSTALLED_PRODUCT = YES;
+ 				STRIP_STYLE = debugging;
+@@ -1627,9 +1655,14 @@
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(DT_TOOLCHAIN_DIR)/usr/local/include",
+ 					"$(TOOLCHAIN_DIR)/usr/local/include",
++					"$(SRCROOT)/../tapi/include",
++					"$(SRCROOT)/../dyld/include",
++					"$(SRCROOT)/../llvm.src/include",
++					"$(SRCROOT)/../corecrypto/include",
+ 				);
+ 				INSTALL_PATH = "$(DT_VARIANT)/$(TOOLCHAIN_INSTALL_DIR)/usr/bin";
+-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../lib/";
++				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../lib/ @executable_path /var/db/xcode_select_link/Toolchains/XcodeDefault.xctoolchain/usr/lib /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib /usr/local/lib";
++				MACOSX_DEPLOYMENT_TARGET = 10.15;
+ 				OTHER_CPLUSPLUSFLAGS = (
+ 					"-stdlib=libc++",
+ 					"$(OTHER_CPLUSPLUSFLAGS)",
+@@ -1644,7 +1677,8 @@
+ 					"-Wl,-stack_size,0x01000000",
+ 				);
+ 				PRODUCT_NAME = ld;
+-				SDKROOT = macosx.internal;
++				RC_ProjectSourceVersion = 609;
++				SDKROOT = macosx;
+ 				SECTORDER_FLAGS = "";
+ 				STRIP_INSTALLED_PRODUCT = YES;
+ 				STRIP_STYLE = debugging;

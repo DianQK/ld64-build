@@ -1,0 +1,25 @@
+diff --git a/include/mach-o/dyld.h b/include/mach-o/dyld.h
+index a2e641c..1e2997b 100644
+--- a/include/mach-o/dyld.h
++++ b/include/mach-o/dyld.h
+@@ -159,6 +159,7 @@ typedef enum {
+
+ typedef struct __NSObjectFileImage* NSObjectFileImage;
+
++#define __API_UNAVAILABLE_PLATFORM_bridgeos bridgeos,unavailable
+
+
+ /* NSObjectFileImage can only be used with MH_BUNDLE files */
+diff --git a/include/mach-o/dyld_priv.h b/include/mach-o/dyld_priv.h
+index dede2fb..bc0a6c7 100644
+--- a/include/mach-o/dyld_priv.h
++++ b/include/mach-o/dyld_priv.h
+@@ -126,6 +126,8 @@ typedef struct {
+     uint32_t        version;
+ } dyld_build_version_t;
+
++#define __API_AVAILABLE_PLATFORM_bridgeos(x) bridgeos,introduced=x
++
+ // Returns the active platform of the process
+ extern dyld_platform_t dyld_get_active_platform(void) __API_AVAILABLE(macos(10.14), ios(12.0), watchos(5.0), tvos(12.0), bridgeos(3.0));
+

@@ -1,0 +1,10 @@
+diff --git a/include/tapi/Version.inc b/include/tapi/Version.inc
+new file mode 100644
+index 0000000000000000000000000000000000000000..43dea5d1c56630b3fac394ca5340eef5d833d691
+--- /dev/null
++++ b/include/tapi/Version.inc
+@@ -0,0 +1,4 @@
++#define TAPI_VERSION 1100.0.11
++#define TAPI_VERSION_MAJOR 1100U
++#define TAPI_VERSION_MINOR 0U
++#define TAPI_VERSION_PATCH 11U
