@@ -1,8 +1,13 @@
+CONFIGURATION = Release
+
 build: fetch
-	xcodebuild -project ld64/ld64.xcodeproj -scheme ld -derivedDataPath build -configuration Release build
+	xcodebuild -project ld64/ld64.xcodeproj -scheme all -derivedDataPath build -configuration $(CONFIGURATION) build
+
+test: fetch
+	xcodebuild -project ld64/ld64.xcodeproj -scheme unit-tests -derivedDataPath build -configuration $(CONFIGURATION) build
 
 clean:
-	rm -rf dyld llvm.src tapi corecrypto ld64
+	rm -rf dyld llvm.src tapi corecrypto ld64 build
 
 fetch: dyld llvm.src tapi corecrypto ld64
 

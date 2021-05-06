@@ -8,8 +8,11 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Xcode select
         run: sudo xcode-select -s /Applications/Xcode_12.4.app/Contents/Developer
-      - name: Build
-        run: make build
+      - name: Release Build
+        run: make
+      - name: Debug Build
+        run: make CONFIGURATION=Debug
