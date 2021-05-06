@@ -8,7 +8,7 @@ fetch: dyld llvm.src tapi corecrypto ld64
 
 dyld:
 	mkdir -p $@
-	curl -# -L https://opensource.apple.com/tarballs/dyld/dyld-733.6.tar.gz | tar xz -C $@ --strip-components=1
+	curl -# -L https://opensource.apple.com/tarballs/dyld/dyld-832.7.3.tar.gz | tar xz -C $@ --strip-components=1
 	patch -p1 -d $@ < patches/dyld.patch
 
 llvm.src:
