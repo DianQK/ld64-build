@@ -11,3 +11,17 @@ diff -Naur dyld_origin/include/mach-o/dyld.h dyld/include/mach-o/dyld.h
  /*
   * The following functions allow you to iterate through all loaded images.
   * This is not a thread safe operation.  Another thread can add or remove
+diff --git a/include/mach-o/dyld_priv.h b/include/mach-o/dyld_priv.h
+--- a/include/mach-o/dyld_priv.h
++++ b/include/mach-o/dyld_priv.h
+@@ -21,6 +21,10 @@
+  * 
+  * @APPLE_LICENSE_HEADER_END@
+  */
++#ifndef TARGET_OS_BRIDGE
++#define TARGET_OS_BRIDGE 0
++#endif
++
+ #ifndef _MACH_O_DYLD_PRIV_H_
+ #define _MACH_O_DYLD_PRIV_H_
+ 
